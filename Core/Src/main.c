@@ -21,8 +21,9 @@
 
 /* Private includes ----------------------------------------------------------*/
 /* USER CODE BEGIN Includes */
-/* We are doing heat monitioring git testing */
+/* We are doing heat monitioring git testing  */
 
+/* We are now in feature temp sensor we will checking this code in featuresensor  */
 /* USER CODE END Includes */
 
 /* Private typedef -----------------------------------------------------------*/
