@@ -66,52 +66,83 @@ static void MX_ADC1_Init(void);
   * @retval int
   */
 
-//defining a variable
+//defining the function which will read the temperature from the LM35
+double Read_Temperature(void){
+
+	unit32_t adc_value = 0;
+
+	//for the conversion:
+	//samples input value
+	HAL_ADC_Start(&hadc1);
+	//checks if the conversion is succesfull
+	if(HAL_ADC_PollForConversion(&hadc1, HAL_MAX_DELAY)==HAL_OK){
+		//this retrieves the value of the ADC conversion if succesfull
+		adc_value = HAL_ADC_GetValue(&hadc1);
+	}
+	HAL_ADC_Stop(&hadc1);
+	//convert
+
+	double voltage = (adc_value/4095.0)*3.3;
+	double temperature = voltage*100.0;
+
+	return temperature;
+}
+
 int main(void)
 {
 
-  /* USER CODE BEGIN 1 */
-
-  /* USER CODE END 1 */
-
-  /* MCU Configuration--------------------------------------------------------*/
-
-  /* Reset of all peripherals, Initializes the Flash interface and the Systick. */
   HAL_Init();
-
-  /* USER CODE BEGIN Init */
-
-  /* USER CODE END Init */
-
-  /* Configure the system clock */
   SystemClock_Config();
-
-  /* USER CODE BEGIN SysInit */
-
-  /* USER CODE END SysInit */
-
-  /* Initialize all configured peripherals */
   MX_GPIO_Init();
   MX_ADC1_Init();
-  /* USER CODE BEGIN 2 */
 
-  /* USER CODE END 2 */
-
-  /* Infinite loop */
-  /* USER CODE BEGIN WHILE */
   while (1)
-  {
-    /* USER CODE END WHILE */
 
-    /* USER CODE BEGIN 3 */
+  {
+	  /* USER CODE BEGIN 1 */
+
+	  /*we're creating a major design change!
+	   * we realized that just having a temperature above 36.6 degrees celcius wouldn't be helpful for the workers. depending on how much heat they have
+	   * it will be useful for them to have levels to how hot they are
+	   * so therefore, they can have the following
+	   *
+	   * a flashing LED light if theres a low alert (36.6 to 38 deg celcius)
+	   * a high alert if (38 deg - 39 deg)
+	   * a critical alert if (>39) so the led just stays off and sends a signal to MCU2
+	   * */
+
+	  //within the while loop, we're going to read the temperature using the Read_Temperature() function
+	  double temperature = Read_Temperature();
+	  //out threshold is that if its above a certain temperature, then we can turn the LED light on and Off
+	  if(temperature > 36.6 && temperature <= 38.0){
+		  //here, the LED will flash
+		  HAL_GPIO_WritePin(GPIOA, GPIO_PIN_5, GPIO_PIN_SET);
+		  HAL_Delay(500);
+		  HAL_GPIO_WritePin(GPIOA, GPIO_PIN_5, GPIO_PIN_RESET);
+		  HAL_Delay(500);
+	  }
+	  //added a condition for if between 38 to 39 then the LED just stays on
+	  else if(temperature > 38.0 && temperature <= 39.0){
+		  HAL_GPIO_WritePin(GPIOA, GPIO_PIN_5, GPIO_PIN_SET);
+	  }
+	  else if(temperature > 39){
+		  //sending the signal to MCU 2
+		  //currently the light stays off
+		  HAL_GPIO_WritePin(GPIOA, GPIO_PIN_5, GPIO_PIN_RESET);
+	  }
+
+
+	  //we're assuming that if not, the LED light will stay off.
+	  HAL_Delay(1000);
   }
-  /* USER CODE END 3 */
+  /* USER CODE END 1 */
+
+
 }
 
-/**
-  * @brief System Clock Configuration
-  * @retval None
-  */
+
+
+
 void SystemClock_Config(void)
 {
   RCC_OscInitTypeDef RCC_OscInitStruct = {0};
