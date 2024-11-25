@@ -70,8 +70,6 @@ static void MX_ADC1_Init(void);
 double Read_Temperature(void){
 
 	unit32_t adc_value = 0;
-	double voltage = 0.0;
-	double temperature = 0.0;
 
 	//for the conversion:
 	//samples input value
@@ -82,6 +80,12 @@ double Read_Temperature(void){
 		adc_value = HAL_ADC_GetValue(&hadc1);
 	}
 	HAL_ADC_Stop(&hadc1);
+	//convert
+
+	double voltage = (adc_value/4095.0)*3.3;
+	double temperature = voltage*100.0;
+
+	return temperature;
 }
 
 int main(void)
