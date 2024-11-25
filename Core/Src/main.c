@@ -72,6 +72,16 @@ double Read_Temperature(void){
 	unit32_t adc_value = 0;
 	double voltage = 0.0;
 	double temperature = 0.0;
+
+	//for the conversion:
+	//samples input value
+	HAL_ADC_Start(&hadc1);
+	//checks if the conversion is succesfull
+	if(HAL_ADC_PollForConversion(&hadc1, HAL_MAX_DELAY)==HAL_OK){
+		//this retrieves the value of the ADC conversion if succesfull
+		adc_value = HAL_ADC_GetValue(&hadc1);
+	}
+	HAL_ADC_Stop(&hadc1);
 }
 
 int main(void)
