@@ -99,6 +99,8 @@ int main(void)
   while (1)
 
   {
+	  /* USER CODE BEGIN 1 */
+
 	  /*we're creating a major design change!
 	   * we realized that just having a temperature above 36.6 degrees celcius wouldn't be helpful for the workers. depending on how much heat they have
 	   * it will be useful for them to have levels to how hot they are
@@ -119,10 +121,22 @@ int main(void)
 		  HAL_GPIO_WritePin(GPIOA, GPIO_PIN_5, GPIO_PIN_RESET);
 		  HAL_Delay(500);
 	  }
+	  //added a condition for if between 38 to 39 then the LED just stays on
+	  else if(temperature > 38.0 && temperature <= 39.0){
+		  HAL_GPIO_WritePin(GPIOA, GPIO_PIN_5, GPIO_PIN_SET);
+	  }
+	  else if(temperature > 39){
+		  //sending the signal to MCU 2
+		  //currently the light stays off
+		  HAL_GPIO_WritePin(GPIOA, GPIO_PIN_5, GPIO_PIN_RESET);
+	  }
+
 
 	  //we're assuming that if not, the LED light will stay off.
 	  HAL_Delay(1000);
   }
+  /* USER CODE END 1 */
+
 
 }
 
