@@ -97,14 +97,29 @@ int main(void)
   MX_ADC1_Init();
 
   while (1)
+
   {
+	  /*we're creating a major design change!
+	   * we realized that just having a temperature above 36.6 degrees celcius wouldn't be helpful for the workers. depending on how much heat they have
+	   * it will be useful for them to have levels to how hot they are
+	   * so therefore, they can have the following
+	   *
+	   * a flashing LED light if theres a low alert (36.6 to 38 deg celcius)
+	   * a high alert if (38 deg - 39 deg)
+	   * a critical alert if (>39) so the led just stays off and sends a signal to MCU2
+	   * */
+
 	  //within the while loop, we're going to read the temperature using the Read_Temperature() function
 	  double temperature = Read_Temperature();
 	  //out threshold is that if its above a certain temperature, then we can turn the LED light on and Off
-	  if(temperature > 36.6){
-		  //this will turn on the LED light, basically
-		  HAL_GPIO_WritePin(GPIOB, GPIO_PIN_0, GPIO_PIN_SET);
+	  if(temperature > 36.6 && temperature <= 38.0){
+		  //here, the LED will flash
+		  HAL_GPIO_WritePin(GPIOA, GPIO_PIN_5, GPIO_PIN_SET);
+		  HAL_Delay(500);
+		  HAL_GPIO_WritePin(GPIOA, GPIO_PIN_5, GPIO_PIN_RESET);
+		  HAL_Delay(500);
 	  }
+
 	  //we're assuming that if not, the LED light will stay off.
 	  HAL_Delay(1000);
   }
