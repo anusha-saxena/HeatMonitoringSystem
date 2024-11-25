@@ -66,7 +66,13 @@ static void MX_ADC1_Init(void);
   * @retval int
   */
 
-//defining a variable
+//defining the function which will read the temperature from the LM35
+double Read_Temperature(void){
+
+	unit32_t adc_value = 0;
+	double voltage = 0.0;
+	double temperature = 0.0;
+}
 
 int main(void)
 {
@@ -86,9 +92,12 @@ int main(void)
 		  HAL_GPIO_WritePin(GPIOB, GPIO_PIN_0, GPIO_PIN_SET);
 	  }
 	  //we're assuming that if not, the LED light will stay off.
+	  HAL_Delay(1000);
   }
 
 }
+
+
 
 
 void SystemClock_Config(void)
