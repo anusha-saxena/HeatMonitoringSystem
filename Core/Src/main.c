@@ -18,7 +18,7 @@
 /* USER CODE END Header */
 /* Includes ------------------------------------------------------------------*/
 #include "main.h"
-
+#include "MAX30100.h"
 /* Private includes ----------------------------------------------------------*/
 /* USER CODE BEGIN Includes */
 /* We are doing heat monitioring git testing  */
@@ -45,6 +45,11 @@
 ADC_HandleTypeDef hadc1;
 
 /* USER CODE BEGIN PV */
+uint16_t heart_rate = 0;
+uint8_t spo2 = 0;
+
+//adding global varables
+
 
 /* USER CODE END PV */
 
@@ -59,7 +64,8 @@ static void MX_ADC1_Init(void);
 /* Private user code ---------------------------------------------------------*/
 /* USER CODE BEGIN 0 */
 
-/* USER CODE END 0 */
+#define WARNING_THRESHOLD 120
+#define CRITICAL_THRESHOLD 150
 
 /**
   * @brief  The application entry point.
@@ -87,6 +93,17 @@ double Read_Temperature(void){
 
 	return temperature;
 }
+//this function is meant to initlzied the MAX30100 and set the sensor to heart rate & SPO2 MODE!!!!
+	void MAX30100_Init(void) {
+	    MAX30100_SetMode(MAX30100_MODE_HR_SPO2); // Set sensor to Heart Rate & SpO2 mode
+	    MAX30100_SetLEDs(MAX30100_LED_CURRENT_27MA, MAX30100_LED_CURRENT_27MA); // LED currents
+	}
+
+//reads data and SPO2
+	void MAX30100_ReadData(void) {
+	    MAX30100_ReadFIFO(&heart_rate, &spo2);
+	}
+
 
 int main(void)
 {
@@ -95,10 +112,16 @@ int main(void)
   SystemClock_Config();
   MX_GPIO_Init();
   MX_ADC1_Init();
+  uint8_t redLED, irLED;
+  MAX30100_Init();
 
   while (1)
 
   {
+
+	  MAX30100_ReadData();
+
+
 	  /* USER CODE BEGIN 1 */
 
 	  /*we're creating a major design change!
@@ -111,27 +134,36 @@ int main(void)
 	   * a critical alert if (>39) so the led just stays off and sends a signal to MCU2
 	   * */
 
+	  //writing code that checks our data from the MAX30100 and fifo data and extracts RED LED
+	  uint8_t fifoData[4];
+	  MAX30100_ReadFifo(fifoData, 4);
+	  HAL_Delay(100);
+
+	  //adding the HEART RATE LOGIC
+	  //wot
+
 	  //within the while loop, we're going to read the temperature using the Read_Temperature() function
 	  double temperature = Read_Temperature();
 	  //out threshold is that if its above a certain temperature, then we can turn the LED light on and Off
-	  if(temperature > 36.6 && temperature <= 38.0){
+	  if(temperature > 36.6 && temperature <= 38.0 && heart_rate < 120 && heart_rate > 100){
 		  //here, the LED will flash
 		  HAL_GPIO_WritePin(GPIOA, GPIO_PIN_5, GPIO_PIN_SET);
 		  HAL_Delay(500);
 		  HAL_GPIO_WritePin(GPIOA, GPIO_PIN_5, GPIO_PIN_RESET);
 		  HAL_Delay(500);
 	  }
+
 	  //added a condition for if between 38 to 39 then the LED just stays on
-	  else if(temperature > 38.0 && temperature <= 39.0){
+	  else if(temperature > 38.0 && temperature <= 39.0 && heart_rate < 120){
 		  HAL_GPIO_WritePin(GPIOA, GPIO_PIN_5, GPIO_PIN_SET);
 	  }
-	  else if(temperature > 39){
+	  else if(temperature > 39 && heart_rate > 120){
 		  //sending the signal to MCU 2
 		  //currently the light stays off
 		  HAL_GPIO_WritePin(GPIOA, GPIO_PIN_5, GPIO_PIN_RESET);
 	  }
 
-
+//added
 	  //we're assuming that if not, the LED light will stay off.
 	  HAL_Delay(1000);
   }
