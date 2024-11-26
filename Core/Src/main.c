@@ -138,20 +138,23 @@ int main(void)
 	  uint8_t fifoData[4];
 	  MAX30100_ReadFifo(fifoData, 4);
 	  HAL_Delay(100);
-	  //extracting the IR LED VALUE since the pulse sensor utilizes it
-	  uint16_t irLED = fifoData[2] << 8 | fifoData[3];
+
+	  //adding the HEART RATE LOGIC
+	  //wot
+
 	  //within the while loop, we're going to read the temperature using the Read_Temperature() function
 	  double temperature = Read_Temperature();
 	  //out threshold is that if its above a certain temperature, then we can turn the LED light on and Off
-	  if(temperature > 36.6 && temperature <= 38.0 && heart_rate < 120){
+	  if(temperature > 36.6 && temperature <= 38.0 && heart_rate < 120 && heart_rate > 100){
 		  //here, the LED will flash
 		  HAL_GPIO_WritePin(GPIOA, GPIO_PIN_5, GPIO_PIN_SET);
 		  HAL_Delay(500);
 		  HAL_GPIO_WritePin(GPIOA, GPIO_PIN_5, GPIO_PIN_RESET);
 		  HAL_Delay(500);
 	  }
+
 	  //added a condition for if between 38 to 39 then the LED just stays on
-	  else if(temperature > 38.0 && temperature <= 39.0 && heart_rate > 120){
+	  else if(temperature > 38.0 && temperature <= 39.0 && heart_rate < 120){
 		  HAL_GPIO_WritePin(GPIOA, GPIO_PIN_5, GPIO_PIN_SET);
 	  }
 	  else if(temperature > 39 && heart_rate > 120){
@@ -160,7 +163,7 @@ int main(void)
 		  HAL_GPIO_WritePin(GPIOA, GPIO_PIN_5, GPIO_PIN_RESET);
 	  }
 
-
+//added
 	  //we're assuming that if not, the LED light will stay off.
 	  HAL_Delay(1000);
   }
