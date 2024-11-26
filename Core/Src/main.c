@@ -92,6 +92,7 @@ uint8_t MAX30102_ReadRegister(unit8_t reg){
 	return value;
 }
 uint8_t MAX30102_WriteRegister(uint8_t reg, uint8_t value){
+	HAL_I2C_Mem_Write(&hi2c1, MAX30100_I2C_ADDRESS, reg, I2C_MEMADD_SIZE_8BIT, &value, 1, HAL_MAX_DELAY);
 
 }
 int main(void)
