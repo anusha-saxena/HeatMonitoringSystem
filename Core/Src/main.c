@@ -98,15 +98,21 @@ double Read_Temperature(void){
 	    MAX30100_SetMode(MAX30100_MODE_HR_SPO2); // Set sensor to Heart Rate & SpO2 mode
 	    MAX30100_SetLEDs(MAX30100_LED_CURRENT_27MA, MAX30100_LED_CURRENT_27MA); // LED currents
 	}
-	//
 
-uint8_t MAX30102_WriteRegister(uint8_t reg, uint8_t value){
-	HAL_I2C_Mem_Write(&hi2c1, MAX30100_I2C_ADDRESS, reg, I2C_MEMADD_SIZE_8BIT, &value, 1, HAL_MAX_DELAY);
+//reads data and SPO2
+	void MAX30100_ReadData(void) {
+	    MAX30100_ReadFIFO(&heart_rate, &spo2);
+	}
 
-}
-void MAX30102_ReadFIFO(uint8_t *data, uint8_t length){
-	HAL_I2C_Mem_Read(&hi2c1, MAX30100_I2C_ADDRESS, 0x05, I2C_MEMADD_SIZE_8BIT, data, length, HAL_MAX_DELAY);
-}
+void Monitor_HeartRate(void) {
+	    MAX30100_ReadData();
+	    if (heart_rate > 120) {
+	        HAL_GPIO_WritePin(GPIOB, GPIO_PIN_0, GPIO_PIN_SET); // Turn on LED (Alert)
+	    } else {
+	        HAL_GPIO_WritePin(GPIOB, GPIO_PIN_0, GPIO_PIN_RESET); // Turn off LED
+	    }
+	}
+
 int main(void)
 {
 
