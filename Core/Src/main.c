@@ -59,7 +59,6 @@ static void MX_ADC1_Init(void);
 /* Private user code ---------------------------------------------------------*/
 /* USER CODE BEGIN 0 */
 
-/* USER CODE END 0 */
 
 /**
   * @brief  The application entry point.
@@ -87,7 +86,14 @@ double Read_Temperature(void){
 
 	return temperature;
 }
+uint8_t MAX30102_ReadRegister(unit8_t reg){
+	unit8_t value;
+	HAL_I2C_Mem_Read(&hi2c1, MAX30100_I2C_ADDRESS, REG, I2C_MEMADD_SIZE_8BIT, &value, 1, HAL_MAX_DELAY);
+	return value;
+}
+uint8_t MAX30102_WriteRegister(uint8_t reg, uint8_t value){
 
+}
 int main(void)
 {
 
