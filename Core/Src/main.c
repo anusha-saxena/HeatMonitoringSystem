@@ -104,14 +104,6 @@ double Read_Temperature(void){
 	    MAX30100_ReadFIFO(&heart_rate, &spo2);
 	}
 
-void Monitor_HeartRate(void) {
-	    MAX30100_ReadData();
-	    if (heart_rate > 120) {
-	        HAL_GPIO_WritePin(GPIOB, GPIO_PIN_0, GPIO_PIN_SET); // Turn on LED (Alert)
-	    } else {
-	        HAL_GPIO_WritePin(GPIOB, GPIO_PIN_0, GPIO_PIN_RESET); // Turn off LED
-	    }
-	}
 
 int main(void)
 {
@@ -127,6 +119,7 @@ int main(void)
 
   {
 
+	  MAX30100_ReadData();
 
 
 	  /* USER CODE BEGIN 1 */
@@ -150,7 +143,7 @@ int main(void)
 	  //within the while loop, we're going to read the temperature using the Read_Temperature() function
 	  double temperature = Read_Temperature();
 	  //out threshold is that if its above a certain temperature, then we can turn the LED light on and Off
-	  if(temperature > 36.6 && temperature <= 38.0){
+	  if(temperature > 36.6 && temperature <= 38.0 && heart_rate < 120){
 		  //here, the LED will flash
 		  HAL_GPIO_WritePin(GPIOA, GPIO_PIN_5, GPIO_PIN_SET);
 		  HAL_Delay(500);
@@ -158,10 +151,10 @@ int main(void)
 		  HAL_Delay(500);
 	  }
 	  //added a condition for if between 38 to 39 then the LED just stays on
-	  else if(temperature > 38.0 && temperature <= 39.0){
+	  else if(temperature > 38.0 && temperature <= 39.0 && heart_rate > 120){
 		  HAL_GPIO_WritePin(GPIOA, GPIO_PIN_5, GPIO_PIN_SET);
 	  }
-	  else if(temperature > 39){
+	  else if(temperature > 39 && heart_rate > 120){
 		  //sending the signal to MCU 2
 		  //currently the light stays off
 		  HAL_GPIO_WritePin(GPIOA, GPIO_PIN_5, GPIO_PIN_RESET);
