@@ -18,6 +18,10 @@
 /* USER CODE END Header */
 /* Includes ------------------------------------------------------------------*/
 #include "main.h"
+#include "main.h"
+#include <stdio.h>
+//this defines the I2C address
+#define MAX30100_I2C_ADDRESS 0x57 << 1
 
 /* Private includes ----------------------------------------------------------*/
 /* USER CODE BEGIN Includes */
@@ -105,10 +109,15 @@ int main(void)
   SystemClock_Config();
   MX_GPIO_Init();
   MX_ADC1_Init();
+  uint8_t redLED, irLED;
+  MAX30100_Init();
 
   while (1)
 
   {
+
+
+
 	  /* USER CODE BEGIN 1 */
 
 	  /*we're creating a major design change!
@@ -121,6 +130,12 @@ int main(void)
 	   * a critical alert if (>39) so the led just stays off and sends a signal to MCU2
 	   * */
 
+	  //writing code that checks our data from the MAX30100 and fifo data and extracts RED LED
+	  uint8_t fifoData[4];
+	  MAX30100_ReadFifo(fifoData, 4);
+	  HAL_Delay(100);
+	  //extracting the IR LED VALUE since the pulse sensor utilizes it
+	  uint16_t irLED = fifoData[2] << 8 | fifoData[3];
 	  //within the while loop, we're going to read the temperature using the Read_Temperature() function
 	  double temperature = Read_Temperature();
 	  //out threshold is that if its above a certain temperature, then we can turn the LED light on and Off
