@@ -18,11 +18,7 @@
 /* USER CODE END Header */
 /* Includes ------------------------------------------------------------------*/
 #include "main.h"
-#include "main.h"
-#include <stdio.h>
-//this defines the I2C address
-#define MAX30100_I2C_ADDRESS 0x57 << 1
-
+#include "MAX30100.h"
 /* Private includes ----------------------------------------------------------*/
 /* USER CODE BEGIN Includes */
 /* We are doing heat monitioring git testing  */
@@ -49,6 +45,10 @@
 ADC_HandleTypeDef hadc1;
 
 /* USER CODE BEGIN PV */
+uint16_t heart_rate = 0;
+uint8_t spo2 = 0;
+
+
 
 /* USER CODE END PV */
 
@@ -63,6 +63,8 @@ static void MX_ADC1_Init(void);
 /* Private user code ---------------------------------------------------------*/
 /* USER CODE BEGIN 0 */
 
+#define WARNING_THRESHOLD 120
+#define CRITICAL_THRESHOLD 150
 
 /**
   * @brief  The application entry point.
