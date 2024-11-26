@@ -48,6 +48,7 @@ ADC_HandleTypeDef hadc1;
 uint16_t heart_rate = 0;
 uint8_t spo2 = 0;
 
+//adding global varables
 
 
 /* USER CODE END PV */
