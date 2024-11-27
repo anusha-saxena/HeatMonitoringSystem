@@ -90,15 +90,22 @@ int main(void)
 
   /* USER CODE END 2 */
 
-  double temperature = Read_Temperature();
-  int heart_rate = Get_HeartRate();
-  HAL_UART_Transmit(&huart1, (uint8_t*)data_to_send, strlen(data_to_send), HAL_MAX_DELAY);
-  HAL_Delay(1000);
+
   /* Infinite loop */
   /* USER CODE BEGIN WHILE */
   while (1)
-  {
+
     /* USER CODE END WHILE */
+      GPIO_PinState signal_state = HAL_GPIO_ReadPin(INPUT_SIGNAL_PORT, INPUT_SIGNAL_PIN);
+
+      if (signal_state == GPIO_PIN_SET) {
+    	  HAL_GPIO_WritePin(PIEZO_PORT, PIEZO_PIN, GPIO_PIN_SET);
+      }
+
+
+      HAL_Delay(500); // Poll every 500 ms
+  }
+
 
     /* USER CODE BEGIN 3 */
   }
