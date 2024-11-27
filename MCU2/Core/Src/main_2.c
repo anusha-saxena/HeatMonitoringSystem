@@ -90,6 +90,10 @@ int main(void)
 
   /* USER CODE END 2 */
 
+  double temperature = Read_Temperature();
+  int heart_rate = Get_HeartRate();
+  HAL_UART_Transmit(&huart1, (uint8_t*)data_to_send, strlen(data_to_send), HAL_MAX_DELAY);
+  HAL_Delay(1000);
   /* Infinite loop */
   /* USER CODE BEGIN WHILE */
   while (1)
@@ -100,6 +104,8 @@ int main(void)
   }
   /* USER CODE END 3 */
 }
+
+
 
 /**
   * @brief System Clock Configuration
