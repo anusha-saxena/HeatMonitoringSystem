@@ -72,6 +72,25 @@ static void MX_ADC1_Init(void);
   * @retval int
   */
 
+//adding power amangement for the code
+
+//adding a function to turn the seson on and off
+void power_Sensors_On(void){
+	//THIS CODE TURNS ON THE PULSE SENSOR
+	HAL_GPIO_WritePin(GPIOA, GPIO_PIN_0, GPIO_PIN_SET);
+	//THIS CODE TURNS ON THE LM35
+	HAL_GPIO_WritePin(GPIOA, GPIO_PIN_1, GPIO_PIN_SET);
+
+}
+//this turns the sensors off
+void Power_Sensors_Off(void){
+	//turns off pulse sesnor
+	HAL_GPIO_WritePin(GPIOA, GPIO_PIN_0, GPIO_PIN_RESET);
+	//turns on pulse sensor
+	HAL_GPIO_WritePin(GPIOA, GPIO_PIN_1, GPIO_PIN_RESET);
+
+}
+
 //defining the function which will read the temperature from the LM35
 double Read_Temperature(void){
 
