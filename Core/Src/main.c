@@ -128,6 +128,7 @@ double Read_Temperature(void){
 int main(void)
 {
 
+
   HAL_Init();
   SystemClock_Config();
   MX_GPIO_Init();
@@ -138,6 +139,9 @@ int main(void)
   while (1)
 
   {
+	  power_Sensors_On();
+
+
 
 	  MAX30100_ReadData();
 
@@ -185,6 +189,9 @@ int main(void)
 
 //added
 	  //we're assuming that if not, the LED light will stay off.
+
+	  //turning the sensor off
+	  power_Sensors_Of();
 	  HAL_Delay(1000);
   }
   /* USER CODE END 1 */
