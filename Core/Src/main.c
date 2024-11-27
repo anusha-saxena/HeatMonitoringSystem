@@ -72,6 +72,26 @@ static void MX_ADC1_Init(void);
   * @retval int
   */
 
+//adding power amangement for the code
+
+//adding a function to turn the seson on and off
+void power_Sensors_On(void){
+	//THIS CODE TURNS ON THE PULSE SENSOR
+	HAL_GPIO_WritePin(GPIOA, GPIO_PIN_0, GPIO_PIN_SET);
+	//THIS CODE TURNS ON THE LM35
+	HAL_GPIO_WritePin(GPIOA, GPIO_PIN_1, GPIO_PIN_SET);
+
+}
+//this turns the sensors off
+//
+void Power_Sensors_Off(void){
+	//turns off pulse sensors
+	HAL_GPIO_WritePin(GPIOA, GPIO_PIN_0, GPIO_PIN_RESET);
+	//turns on pulse sensor
+	HAL_GPIO_WritePin(GPIOA, GPIO_PIN_1, GPIO_PIN_RESET);
+
+}
+
 //defining the function which will read the temperature from the LM35
 double Read_Temperature(void){
 
@@ -108,6 +128,7 @@ double Read_Temperature(void){
 int main(void)
 {
 
+
   HAL_Init();
   SystemClock_Config();
   MX_GPIO_Init();
@@ -118,6 +139,9 @@ int main(void)
   while (1)
 
   {
+	  power_Sensors_On();
+
+
 
 	  MAX30100_ReadData();
 
@@ -165,6 +189,12 @@ int main(void)
 
 //added
 	  //we're assuming that if not, the LED light will stay off.
+
+	  //turning the sensor off
+	  if(heart_rate < 80){
+		  power_Sensors_Off();
+	  }
+
 	  HAL_Delay(1000);
   }
   /* USER CODE END 1 */
