@@ -103,10 +103,11 @@ double temperature; int heart_rate;
     /* USER CODE END WHILE */
       GPIO_PinState signal_state = HAL_GPIO_ReadPin(INPUT_SIGNAL_PORT, INPUT_SIGNAL_PIN);
 
-      if (signal_state == GPIO_PIN_SET) {
-    	  HAL_GPIO_WritePin(PIEZO_PORT, PIEZO_PIN, GPIO_PIN_SET);
-      }
+      if(temperature > 39 && heart_rate > 120){
+    	/activating Piezo
+		HAL_GPIO_WritePin(GPIOB, GPIO_PIN_10, GPIO_PIN_SET);
 
+      }
 
       HAL_Delay(500); // Poll every 500 ms
   }
