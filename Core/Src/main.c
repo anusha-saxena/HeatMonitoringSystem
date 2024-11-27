@@ -207,6 +207,15 @@ int main(void)
 	  }
 	  else if(temperature > 39 && heart_rate > 120){
 		  //sending the signal to MCU 2
+
+		  //to send the signal, heres what wer're doing:
+		  //we're using the function HAL_UART_TRANSMIT to give it out temp and heart rate
+		  //creating an array
+		  char data_to_send[50];
+		  sprintf(data_to_send, "", Read_Temperature(), MAX30100_ReadData());
+		  //acc transmiting the data
+		  HAL_UART_Transmit(&huart1, (uint8_t*)data_to_send, strlen(data_to_send), HAL_MAX_DELAY);
+		  HAL_Delay(5000);
 		  //currently the light stays off
 		  //green LED off
 		  HAL_GPIO_WritePin(GPIOA, GPIO_PIN_6, GPIO_PIN_RESET);
