@@ -90,16 +90,35 @@ int main(void)
 
   /* USER CODE END 2 */
 
-  /* Infinite loop */
+
+  char recieved_data[50];
+  //recieving data
+  HAL_UART_Receive(&huart2, (uint8_t*)received_data, sizeof(received_data), HAL_MAX_DELAY);
+double temperature; int heart_rate;
+  sscanf(received_data, "", &temperature, &heart_rate);
+
   /* USER CODE BEGIN WHILE */
   while (1)
-  {
+
     /* USER CODE END WHILE */
+      GPIO_PinState signal_state = HAL_GPIO_ReadPin(INPUT_SIGNAL_PORT, INPUT_SIGNAL_PIN);
+
+      if(temperature > 39 && heart_rate > 120){
+    	/activating Piezo
+		HAL_GPIO_WritePin(GPIOB, GPIO_PIN_10, GPIO_PIN_SET);
+
+      }
+
+      HAL_Delay(500); // Poll every 500 ms
+  }
+
 
     /* USER CODE BEGIN 3 */
   }
   /* USER CODE END 3 */
 }
+
+
 
 /**
   * @brief System Clock Configuration
