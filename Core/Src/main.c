@@ -164,13 +164,18 @@ int main(void)
 	  HAL_Delay(100);
 
 	  //adding the HEART RATE LOGIC
-	  //wot
+	  //keeps the green LED Light on
+	  HAL_GPIO_WritePin(GPIOA, GPIO_PIN_6, GPIO_PIN_SET);
+	  //keeps green LED off
+	  HAL_GPIO_WritePin(GPIOA, GPIO_PIN_5, GPIO_PIN_RESET);
 
 	  //within the while loop, we're going to read the temperature using the Read_Temperature() function
 	  double temperature = Read_Temperature();
 	  //out threshold is that if its above a certain temperature, then we can turn the LED light on and Off
 	  if(temperature > 36.6 && temperature <= 38.0 && heart_rate < 120 && heart_rate > 100){
 		  //here, the LED will flash
+		  //green LED off
+		  HAL_GPIO_WritePin(GPIOA, GPIO_PIN_6, GPIO_PIN_RESET);
 		  HAL_GPIO_WritePin(GPIOA, GPIO_PIN_5, GPIO_PIN_SET);
 		  HAL_Delay(500);
 		  HAL_GPIO_WritePin(GPIOA, GPIO_PIN_5, GPIO_PIN_RESET);
@@ -179,11 +184,15 @@ int main(void)
 
 	  //added a condition for if between 38 to 39 then the LED just stays on
 	  else if(temperature > 38.0 && temperature <= 39.0 && heart_rate < 120){
+		  //green LED off
+		  HAL_GPIO_WritePin(GPIOA, GPIO_PIN_6, GPIO_PIN_RESET);
 		  HAL_GPIO_WritePin(GPIOA, GPIO_PIN_5, GPIO_PIN_SET);
 	  }
 	  else if(temperature > 39 && heart_rate > 120){
 		  //sending the signal to MCU 2
 		  //currently the light stays off
+		  //green LED off
+		  HAL_GPIO_WritePin(GPIOA, GPIO_PIN_6, GPIO_PIN_RESET);
 		  HAL_GPIO_WritePin(GPIOA, GPIO_PIN_5, GPIO_PIN_RESET);
 	  }
 
