@@ -67,6 +67,11 @@ static void MX_ADC1_Init(void);
 #define WARNING_THRESHOLD 120
 #define CRITICAL_THRESHOLD 150
 
+
+//defining Pins that recieve signal from MCU1 (D6) to MCU 2
+#define SIGNAL_PIN GPIO_PIN_6
+#define PIEZO_PIN GPIO_PIN_10
+
 /**
   * @brief  The application entry point.
   * @retval int
@@ -91,6 +96,17 @@ void Power_Sensors_Off(void){
 	HAL_GPIO_WritePin(GPIOA, GPIO_PIN_1, GPIO_PIN_RESET);
 
 }
+
+void check_signal_and_activate_piezo(void) {
+    if (HAL_GPIO_ReadPin(GPIOB, SIGNAL_PIN) == GPIO_PIN_SET) {
+    	//turn on piezo::
+             HAL_GPIO_WritePin(GPIOB, PIEZO_PIN, GPIO_PIN_SET);
+    } else {
+    	//turn off piezo::
+        HAL_GPIO_WritePin(GPIOB, PIEZO_PIN, GPIO_PIN_RESET);  // Turn off piezo
+    }
+}
+
 
 //defining the function which will read the temperature from the LM35
 double Read_Temperature(void){
