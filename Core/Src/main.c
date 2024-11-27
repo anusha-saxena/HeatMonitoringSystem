@@ -83,8 +83,9 @@ void power_Sensors_On(void){
 
 }
 //this turns the sensors off
+//
 void Power_Sensors_Off(void){
-	//turns off pulse sesnor
+	//turns off pulse sensors
 	HAL_GPIO_WritePin(GPIOA, GPIO_PIN_0, GPIO_PIN_RESET);
 	//turns on pulse sensor
 	HAL_GPIO_WritePin(GPIOA, GPIO_PIN_1, GPIO_PIN_RESET);
