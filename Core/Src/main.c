@@ -113,6 +113,7 @@ double Read_Temperature(void){
 
 	return temperature;
 }
+//
 //this function is meant to initlzied the MAX30100 and set the sensor to heart rate & SPO2 MODE!!!!
 	void MAX30100_Init(void) {
 	    MAX30100_SetMode(MAX30100_MODE_HR_SPO2); // Set sensor to Heart Rate & SpO2 mode
