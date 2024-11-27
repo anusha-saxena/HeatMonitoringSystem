@@ -91,7 +91,12 @@ int main(void)
   /* USER CODE END 2 */
 
 
-  /* Infinite loop */
+  char recieved_data[50];
+  //recieving data
+  HAL_UART_Receive(&huart2, (uint8_t*)received_data, sizeof(received_data), HAL_MAX_DELAY);
+double temperature; int heart_rate;
+  sscanf(received_data, "", &temperature, &heart_rate);
+
   /* USER CODE BEGIN WHILE */
   while (1)
 
