@@ -166,6 +166,8 @@ int main(void)
 	  //adding the HEART RATE LOGIC
 	  //keeps the green LED Light on
 	  HAL_GPIO_WritePin(GPIOA, GPIO_PIN_6, GPIO_PIN_SET);
+	  //keeps green LED off
+	  HAL_GPIO_WritePin(GPIOA, GPIO_PIN_5, GPIO_PIN_RESET);
 
 	  //within the while loop, we're going to read the temperature using the Read_Temperature() function
 	  double temperature = Read_Temperature();
