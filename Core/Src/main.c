@@ -191,7 +191,10 @@ int main(void)
 	  //we're assuming that if not, the LED light will stay off.
 
 	  //turning the sensor off
-	  power_Sensors_Of();
+	  if(heart_rate < 80){
+		  power_Sensors_Off();
+	  }
+
 	  HAL_Delay(1000);
   }
   /* USER CODE END 1 */
